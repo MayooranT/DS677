@@ -18,9 +18,10 @@ QUERY = LANGUAGE.query("""
 """)
 
 
-global_parser = Parser()
+global_parser = Parser(LANGUAGE)
+# language = get_language('python')
 # global_parser.set_language(LANGUAGE)
-parser = get_parser('python')
+# parser = get_parser('python')
 
 
 def get_fn_name(code, parser=global_parser):
