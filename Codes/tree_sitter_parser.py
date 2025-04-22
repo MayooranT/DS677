@@ -23,7 +23,6 @@ global_parser = Parser(LANGUAGE)
 # global_parser.set_language(LANGUAGE)
 # parser = get_parser('python')
 
-
 def get_fn_name(code, parser=global_parser):
     src = bytes(code, "utf8")
     tree = parser.parse(src)
@@ -39,10 +38,8 @@ def node_to_string(src: bytes, node):
 
 
 def make_parser():
-    _parser = Parser()
-    _parser.set_language(LANGUAGE)
+    _parser = Parser(LANGUAGE)
     return _parser
-
 
 RETURN_QUERY = LANGUAGE.query("""
 (return_statement) @return
