@@ -1,27 +1,26 @@
 from tree_sitter import Language, Parser
-import tree_sitter_python as tspython
-from tree_sitter_languages import get_language, get_parser
 
-# Language.build_library(
-#     'build/lang.so',
-#     [
-#         './tree-sitter-python'
-#     ]
-# )
-# LANGUAGE = Language('build/lang.so', 'python')
-
-LANGUAGE = Language(tspython.language())
+Language.build_library(
+    'build/lang.so',
+    [
+        './tree-sitter-cpp'
+    ]
+)
+LANGUAGE = Language('build/lang.so', 'cpp')
 
 
 QUERY = LANGUAGE.query("""
-(function_definition name: (identifier) @fn-name)
+(function_definition
+  declarator: (function_declarator
+    declarator: (identifier) @fn-name
+  )
+)
 """)
 
 
-global_parser = Parser(LANGUAGE)
-# language = get_language('python')
-# global_parser.set_language(LANGUAGE)
-# parser = get_parser('python')
+global_parser = Parser()
+global_parser.set_language(LANGUAGE)
+
 
 def get_fn_name(code, parser=global_parser):
     src = bytes(code, "utf8")
@@ -38,8 +37,10 @@ def node_to_string(src: bytes, node):
 
 
 def make_parser():
-    _parser = Parser(LANGUAGE)
+    _parser = Parser()
+    _parser.set_language(LANGUAGE)
     return _parser
+
 
 RETURN_QUERY = LANGUAGE.query("""
 (return_statement) @return
@@ -61,8 +62,13 @@ def does_have_return(src, parser=global_parser):
 
 
 if __name__ == "__main__":
-    code = """
-import ble
-from a import b
+    code ="""
+int add(int a, int b) {
+    return a + b;
+}
+
+void greet() {
+    std::cout << "Hello, World!" << std::endl;
+}
 """
     print(global_parser.parse(bytes(code, "utf8")).root_node.sexp())

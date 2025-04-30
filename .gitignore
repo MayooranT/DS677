@@ -1,2 +1,6 @@
 /nk569
 *.pyc
+/Codes/.venv
+/Codes/tree-sitter-cpp
+/Codes/cache
+/Codes/build
